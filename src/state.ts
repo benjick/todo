@@ -40,21 +40,21 @@ interface State {
 const initialState: State = {
   categories: [
     {
-      id: "a",
+      id: "todos",
       name: "Todos",
       sort: 0,
       resetEvery: "never",
       closeAfterFinished: 0,
     },
     {
-      id: "b",
+      id: "daily",
       name: "Daily",
       sort: 1,
       resetEvery: "day",
       closeAfterFinished: 2,
     },
     {
-      id: "c",
+      id: "weekly",
       name: "Weekly",
       sort: 2,
       resetEvery: "week",
@@ -63,14 +63,20 @@ const initialState: State = {
   ],
   items: [
     {
-      category: "a",
+      category: "weekly",
       id: "a",
       name: "Work on todo app",
     },
     {
-      category: "a",
+      category: "todos",
       id: "b",
       name: "Test it",
+    },
+    {
+      category: "daily",
+      id: uuidv4(),
+      name: "Clean",
+      timerMinutes: 15,
     },
   ],
   events: [

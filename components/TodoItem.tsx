@@ -77,7 +77,6 @@ const Popup: React.FC<{
   // End the timer when time = 0
   useEffect(() => {
     if (showTimer && intervalRef.current && timeleft < 1) {
-      console.log("clearinterval");
       play();
       clearInterval(intervalRef.current);
       intervalRef.current = undefined;
@@ -87,7 +86,6 @@ const Popup: React.FC<{
   // When closing the popup
   useEffect(() => {
     if (!showTimer) {
-      console.log("showTimer no");
       stop();
       setTimeleft(minutes * 60 * 1000);
       intervalRef.current && clearInterval(intervalRef.current);
@@ -175,7 +173,10 @@ export const TodoItem: React.FC<{ item: Item }> = ({ item }) => {
         </div>
         <div className="flex-1 min-w-0">
           <p className="text-sm font-medium text-gray-900 truncate">
-            {item.name}
+            {item.name}{" "}
+            {item.timerMinutes ? (
+              <span>({item.timerMinutes} min)</span>
+            ) : undefined}
           </p>
         </div>
         <div>
