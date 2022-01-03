@@ -59,32 +59,40 @@ const Popup: React.FC<{
   minutes: number;
 }> = ({ showTimer, setShowTimer, finishedTodo, minutes }) => {
   const [timeleft, setTimeleft] = useState(() => minutes * 60 * 1000);
-  const didStart = useRef(false);
 
-  const [play] = useSound(lofiBells);
-
+  const [play, { stop }] = useSound(lofiBells);
   const intervalRef = useRef<NodeJS.Timer>();
-
   const ms = 100;
 
+  // Start the timer
   useEffect(() => {
     // TODO: Maybe redo this to something better compares to the opened time instead
-    if (showTimer && !didStart.current) {
-      didStart.current = true;
+    if (showTimer) {
       intervalRef.current = setInterval(() => {
         setTimeleft((timeleft) => timeleft - ms);
       }, ms);
     }
-    return () => intervalRef.current && clearInterval(intervalRef.current);
-  }, [showTimer, timeleft, play]);
+  }, [showTimer, play]);
 
+  // End the timer when time = 0
   useEffect(() => {
-    if (intervalRef.current && timeleft < 1) {
+    if (showTimer && intervalRef.current && timeleft < 1) {
+      console.log("clearinterval");
       play();
       clearInterval(intervalRef.current);
       intervalRef.current = undefined;
     }
-  }, [timeleft, play]);
+  }, [timeleft, play, showTimer]);
+
+  // When closing the popup
+  useEffect(() => {
+    if (!showTimer) {
+      console.log("showTimer no");
+      stop();
+      setTimeleft(minutes * 60 * 1000);
+      intervalRef.current && clearInterval(intervalRef.current);
+    }
+  }, [showTimer, stop, minutes]);
 
   return (
     <Transition.Root show={showTimer} as={Fragment}>
@@ -119,7 +127,7 @@ const Popup: React.FC<{
               title="Timer running"
               icon={ClockIcon}
             >
-              {msToTime(timeleft)}
+              <span className="font-mono">{msToTime(timeleft)}</span>
             </Child>
           ) : (
             <Child onClick={finishedTodo} title="You're done!" icon={CheckIcon}>
