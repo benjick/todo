@@ -5,9 +5,13 @@ import { AddCategory } from "../components/AddCategory";
 import { ShowCompleted } from "../components/ShowCompleted";
 import { AddItem } from "../components/AddItem";
 import { TodoItem } from "../components/TodoItem";
+import { EmptyState } from "../components/EmptyState";
 
 const Home: NextPage = () => {
-  const { categoriesWithEvents, finishTodo } = useTodo();
+  const { categoriesWithEvents } = useTodo();
+  const categoriesWithEventsAndItems = categoriesWithEvents.filter(
+    (category) => category.items.length > 0
+  );
   return (
     <div>
       <Head>
@@ -22,16 +26,20 @@ const Home: NextPage = () => {
 
         <ShowCompleted />
         <hr />
-        {categoriesWithEvents.map((category) => (
-          <div className="flow-root mt-6" key={category.id}>
-            <p>{category.name}</p>
-            <ul role="list" className="-my-5 divide-y divide-gray-200">
-              {category.items.map((item) => (
-                <TodoItem key={item.id} item={item} />
-              ))}
-            </ul>
-          </div>
-        ))}
+        {categoriesWithEventsAndItems.length > 0 ? (
+          categoriesWithEventsAndItems.map((category) => (
+            <div className="flow-root mt-6" key={category.id}>
+              <p>{category.name}</p>
+              <ul role="list" className="-my-5 divide-y divide-gray-200">
+                {category.items.map((item) => (
+                  <TodoItem key={item.id} item={item} />
+                ))}
+              </ul>
+            </div>
+          ))
+        ) : (
+          <EmptyState />
+        )}
       </main>
     </div>
   );
