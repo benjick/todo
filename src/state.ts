@@ -75,7 +75,7 @@ const initialState: State = {
     },
     {
       category: "daily",
-      id: uuidv4(),
+      id: "c",
       name: "Clean",
       timerMinutes: 15,
     },
@@ -144,6 +144,15 @@ export const useStore = create(
   )
 );
 
+function getCompareData(resetEvery: "week" | "day" | "never") {
+  if (resetEvery === "week") {
+    return dayjs().subtract(1, "week");
+  }
+  if (resetEvery === "day") {
+    return dayjs().subtract(1, "day");
+  }
+}
+
 export const useTodo = () => {
   const {
     categories,
@@ -177,20 +186,16 @@ export const useTodo = () => {
             }
 
             if (!showCompleted) {
-              let date: dayjs.Dayjs | undefined = undefined;
-              if (category.resetEvery === "week") {
-                date = dayjs().subtract(1, "week");
-              }
-              if (category.resetEvery === "day") {
-                date = dayjs().subtract(1, "day");
-              }
+              const compareDate = getCompareData(category.resetEvery);
 
               const latestEvent = sortedEvents.find(
                 (event) => event.item === item.id
               );
               if (
                 latestEvent &&
-                (!date || (date && dayjs(latestEvent.date).isAfter(date)))
+                ((compareDate &&
+                  dayjs(latestEvent.date).isAfter(compareDate)) ||
+                  !compareDate)
               ) {
                 return false;
               }
