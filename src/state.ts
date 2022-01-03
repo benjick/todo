@@ -4,6 +4,7 @@ import produce from "immer";
 import { v4 as uuidv4 } from "uuid";
 import { useMemo } from "react";
 import { default as dayjs } from "dayjs";
+import { storageStub } from "./storage.stub";
 
 interface Category {
   id: string;
@@ -132,6 +133,8 @@ export const useStore = create(
     })),
     {
       name: "todo",
+      getStorage: () =>
+        process.env.NODE_ENV === "test" ? storageStub : localStorage,
       partialize: (state) => ({
         categories: state.categories,
         items: state.items,
