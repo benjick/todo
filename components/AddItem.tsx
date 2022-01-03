@@ -46,7 +46,7 @@ export function AddItem() {
           onClose={setOpen}
         >
           <div className="absolute inset-0 overflow-hidden">
-            <Dialog.Overlay className="absolute inset-0" />
+            <Dialog.Overlay className="absolute inset-0 bg-black opacity-30" />
 
             <div className="fixed inset-y-0 pl-16 max-w-full right-0 flex">
               <Transition.Child

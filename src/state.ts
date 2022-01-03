@@ -13,7 +13,7 @@ interface Category {
   closeAfterFinished: number; // 0 === never close
 }
 
-interface Item {
+export interface Item {
   id: string;
   category: string; // category id
   name: string;
