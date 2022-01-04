@@ -33,7 +33,10 @@ const Home: NextPage = () => {
               {categoriesWithEventsAndItems.map((category) => (
                 <li key={category.id} className="px-4 py-4 sm:px-6">
                   <p className="block text-sm font-medium text-gray-700 mb-4">
-                    {category.name}
+                    {category.name}{" "}
+                    {category.closeAfterFinished ? (
+                      <span>(complete {category.closeAfterFinished})</span>
+                    ) : undefined}
                   </p>
                   <ul role="list" className="-my-5 divide-y divide-gray-200">
                     {category.items.map((item) => (
