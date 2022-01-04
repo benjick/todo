@@ -15,8 +15,8 @@ export function AddCategory() {
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const name = nameRef.current?.value;
-    const resetAfterDays = closeAfterFinishedRef.current
-      ? Number(closeAfterFinishedRef.current.value)
+    const resetAfterDays = resetRef.current
+      ? Number(resetRef.current.value)
       : undefined;
     const closeAfterFinished = closeAfterFinishedRef.current
       ? Number(closeAfterFinishedRef.current.value)
