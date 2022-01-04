@@ -9,33 +9,27 @@ export function AddCategory() {
   const { categoriesWithEvents } = useTodo();
   const { addCategory } = useStore();
   const nameRef = useRef<HTMLInputElement>(null);
-  const resetRef = useRef<HTMLSelectElement>(null);
+  const resetRef = useRef<HTMLInputElement>(null);
   const closeAfterFinishedRef = useRef<HTMLInputElement>(null);
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const name = nameRef.current?.value;
-    let resetEvery = resetRef.current?.value as
-      | "never"
-      | "day"
-      | "week"
-      | undefined;
+    const resetAfterDays = closeAfterFinishedRef.current
+      ? Number(closeAfterFinishedRef.current.value)
+      : undefined;
     const closeAfterFinished = closeAfterFinishedRef.current
       ? Number(closeAfterFinishedRef.current.value)
       : 0;
 
-    if (!name || !resetEvery) {
+    if (!name) {
       return;
-    }
-
-    if (!["day", "week", "never"].includes(resetEvery)) {
-      resetEvery = "never";
     }
 
     addCategory({
       name,
       closeAfterFinished,
-      resetEvery,
+      resetAfterDays,
       sort: categoriesWithEvents.length,
     });
     nameRef.current.value = "";
@@ -119,25 +113,20 @@ export function AddCategory() {
                             </div>
                             <div>
                               <label
-                                htmlFor="reset-rate"
+                                htmlFor="category-name"
                                 className="block text-sm font-medium text-gray-900"
                               >
-                                Item reset rate
+                                Reset item after X days
                               </label>
                               <div className="mt-1">
-                                <select
+                                <input
                                   ref={resetRef}
-                                  id="reset-rate"
+                                  min="1"
+                                  step="1"
+                                  id="category-name"
+                                  type="number"
                                   className="block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
-                                >
-                                  <option value="never">
-                                    Never reset tasks
-                                  </option>
-                                  <option value="day">Reset tasks daily</option>
-                                  <option value="week">
-                                    Reset tasks weekly
-                                  </option>
-                                </select>
+                                />
                               </div>
                             </div>
                             <div>
@@ -152,6 +141,7 @@ export function AddCategory() {
                                   ref={closeAfterFinishedRef}
                                   id="close-after-finish"
                                   type="number"
+                                  min="1"
                                   step="1"
                                   className="block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
                                 />

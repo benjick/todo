@@ -10,7 +10,7 @@ interface Category {
   id: string;
   sort: number;
   name: string;
-  resetEvery: "day" | "week" | "never";
+  resetAfterDays?: number;
   closeAfterFinished: number; // 0 === never close
 }
 
@@ -44,21 +44,20 @@ const initialState: State = {
       id: "todos",
       name: "Todos",
       sort: 0,
-      resetEvery: "never",
       closeAfterFinished: 0,
     },
     {
       id: "daily",
       name: "Daily",
       sort: 1,
-      resetEvery: "day",
+      resetAfterDays: 1,
       closeAfterFinished: 2,
     },
     {
       id: "weekly",
       name: "Weekly",
       sort: 2,
-      resetEvery: "week",
+      resetAfterDays: 7,
       closeAfterFinished: 4,
     },
   ],
@@ -156,13 +155,11 @@ export const useStore = create(
   )
 );
 
-function getCompareData(resetEvery: "week" | "day" | "never") {
-  if (resetEvery === "week") {
-    return dayjs().subtract(1, "week");
+function getCompareData(resetAfterDays?: number) {
+  if (!resetAfterDays || resetAfterDays < 1) {
+    return undefined;
   }
-  if (resetEvery === "day") {
-    return dayjs().subtract(1, "day");
-  }
+  return dayjs().subtract(resetAfterDays, "days");
 }
 
 export const useTodo = () => {
@@ -198,7 +195,7 @@ export const useTodo = () => {
             }
 
             if (!showCompleted) {
-              const compareDate = getCompareData(category.resetEvery);
+              const compareDate = getCompareData(category.resetAfterDays);
 
               const latestEvent = sortedEvents.find(
                 (event) => event.item === item.id
