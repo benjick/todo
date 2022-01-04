@@ -20,23 +20,30 @@ const Home: NextPage = () => {
       </Head>
 
       <main>
-        <AddItem />
-
-        <AddCategory />
-
-        <ShowCompleted />
+        <span className="relative z-0 inline-flex shadow-sm rounded-md m-2">
+          <AddItem />
+          <AddCategory />
+          <ShowCompleted />
+        </span>
         <hr />
+
         {categoriesWithEventsAndItems.length > 0 ? (
-          categoriesWithEventsAndItems.map((category) => (
-            <div className="flow-root mt-6" key={category.id}>
-              <p>{category.name}</p>
-              <ul role="list" className="-my-5 divide-y divide-gray-200">
-                {category.items.map((item) => (
-                  <TodoItem key={item.id} item={item} />
-                ))}
-              </ul>
-            </div>
-          ))
+          <div className="bg-white shadow overflow-hidden sm:rounded-md">
+            <ul role="list" className="divide-y divide-gray-200">
+              {categoriesWithEventsAndItems.map((category) => (
+                <li key={category.id} className="px-4 py-4 sm:px-6">
+                  <p className="block text-sm font-medium text-gray-700 mb-4">
+                    {category.name}
+                  </p>
+                  <ul role="list" className="-my-5 divide-y divide-gray-200">
+                    {category.items.map((item) => (
+                      <TodoItem key={item.id} item={item} />
+                    ))}
+                  </ul>
+                </li>
+              ))}
+            </ul>
+          </div>
         ) : (
           <EmptyState />
         )}

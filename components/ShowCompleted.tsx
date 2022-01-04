@@ -9,7 +9,7 @@ export function ShowCompleted() {
   const { showCompleted, setShowCompleted } = useTodo();
 
   return (
-    <Switch.Group as="div" className="flex items-center">
+    <Switch.Group as="div" className="flex items-center ml-2">
       <Switch
         checked={showCompleted}
         onChange={setShowCompleted}
@@ -26,11 +26,9 @@ export function ShowCompleted() {
           )}
         />
       </Switch>
-      <Switch.Label as="span" className="ml-3">
-        <span className="text-sm font-medium text-gray-900">
-          Show completed tasks
-        </span>
-      </Switch.Label>
+      {/* <Switch.Label as="span" className="ml-3">
+        <span className="text-sm font-medium text-gray-900">Show</span>
+      </Switch.Label> */}
     </Switch.Group>
   );
 }

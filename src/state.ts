@@ -76,6 +76,18 @@ const initialState: State = {
     {
       category: "daily",
       id: "c",
+      name: "Workout",
+      timerMinutes: 15,
+    },
+    {
+      category: "daily",
+      id: "d",
+      name: "Clean",
+      timerMinutes: 15,
+    },
+    {
+      category: "daily",
+      id: "e",
       name: "Clean",
       timerMinutes: 15,
     },
@@ -136,8 +148,8 @@ export const useStore = create(
       getStorage: () =>
         process.env.NODE_ENV === "test" ? storageStub : localStorage,
       partialize: (state) => ({
-        categories: state.categories,
-        items: state.items,
+        // categories: state.categories,
+        // items: state.items,
         // events: state.events,
       }),
     }
