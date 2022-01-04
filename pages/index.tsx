@@ -10,7 +10,7 @@ import { EmptyState } from "../components/EmptyState";
 const Home: NextPage = () => {
   const { categoriesWithEvents } = useTodo();
   const categoriesWithEventsAndItems = categoriesWithEvents.filter(
-    (category) => category.items.length > 0
+    (category) => category.items.length > 0 && !category.hide
   );
   return (
     <div>

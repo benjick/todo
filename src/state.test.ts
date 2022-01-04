@@ -1,5 +1,5 @@
 import { renderHook, act } from "@testing-library/react-hooks";
-import { useTodo } from "./state";
+import { useStore, useTodo } from "./state";
 
 afterEach(() => {
   jest.useRealTimers();
@@ -49,4 +49,38 @@ describe("re-showing tasks after a while", () => {
 
     expect(result.current.categoriesWithEvents[1].items.length).toBe(3);
   });
+});
+
+test("hide category on X finished tasks", () => {
+  const { result } = renderHook(() => useTodo());
+  const { result: store } = renderHook(() => useStore());
+  act(() => {
+    store.current.addCategory({
+      name: "test",
+      sort: -1,
+      closeAfterFinished: 1,
+    });
+  });
+  const category = result.current.categoriesWithEvents.findIndex(
+    (category) => category.name === "test"
+  );
+  act(() => {
+    store.current.addItem({
+      category: result.current.categoriesWithEvents[category].id,
+      name: "test1",
+    });
+    store.current.addItem({
+      category: result.current.categoriesWithEvents[category].id,
+      name: "test1",
+    });
+  });
+  expect(result.current.categoriesWithEvents[category].items.length).toBe(2);
+  expect(result.current.categoriesWithEvents[category].hide).toBe(false);
+  act(() => {
+    store.current.finishTodo(
+      result.current.categoriesWithEvents[category].items[0].id
+    );
+  });
+  expect(result.current.categoriesWithEvents[category].items.length).toBe(1);
+  expect(result.current.categoriesWithEvents[category].hide).toBe(true);
 });

@@ -20,7 +20,7 @@ export function AddCategory() {
       : undefined;
     const closeAfterFinished = closeAfterFinishedRef.current
       ? Number(closeAfterFinishedRef.current.value)
-      : 0;
+      : undefined;
 
     if (!name) {
       return;

@@ -11,7 +11,7 @@ interface Category {
   sort: number;
   name: string;
   resetAfterDays?: number;
-  closeAfterFinished: number; // 0 === never close
+  closeAfterFinished?: number;
 }
 
 export interface Item {
@@ -22,6 +22,7 @@ export interface Item {
 }
 
 interface CategoryWithItems extends Category {
+  hide: boolean;
   items: Item[];
 }
 
@@ -186,31 +187,36 @@ export const useTodo = () => {
     let sortedCategories = categories
       .slice()
       .sort((a, b) => a.sort - b.sort)
-      .map((category) => {
-        return {
-          ...category,
-          items: items.filter((item) => {
-            if (item.category !== category.id) {
+      .map((category): CategoryWithItems => {
+        let doneItems = 0;
+        const _items = items.filter((item) => {
+          if (item.category !== category.id) {
+            return false;
+          }
+
+          if (!showCompleted) {
+            const compareDate = getCompareData(category.resetAfterDays);
+
+            const latestEvent = sortedEvents.find(
+              (event) => event.item === item.id
+            );
+            if (
+              latestEvent &&
+              ((compareDate && dayjs(latestEvent.date).isAfter(compareDate)) ||
+                !compareDate)
+            ) {
+              doneItems += 1;
               return false;
             }
-
-            if (!showCompleted) {
-              const compareDate = getCompareData(category.resetAfterDays);
-
-              const latestEvent = sortedEvents.find(
-                (event) => event.item === item.id
-              );
-              if (
-                latestEvent &&
-                ((compareDate &&
-                  dayjs(latestEvent.date).isAfter(compareDate)) ||
-                  !compareDate)
-              ) {
-                return false;
-              }
-            }
-            return true;
-          }),
+          }
+          return true;
+        });
+        return {
+          ...category,
+          items: _items,
+          hide: category.closeAfterFinished
+            ? doneItems >= category.closeAfterFinished
+            : false,
         } as CategoryWithItems;
       });
 
