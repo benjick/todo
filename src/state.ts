@@ -88,8 +88,8 @@ const initialState: State = {
     {
       category: "daily",
       id: "e",
-      name: "Clean",
-      timerMinutes: 15,
+      name: "Read",
+      timerMinutes: 10,
     },
   ],
   events: [

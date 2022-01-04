@@ -38,15 +38,15 @@ describe("re-showing tasks after a while", () => {
     jest.useFakeTimers();
     const { result } = renderHook(() => useTodo());
 
-    expect(result.current.categoriesWithEvents[1].items.length).toBe(1);
+    expect(result.current.categoriesWithEvents[1].items.length).toBe(3);
     act(() => {
       result.current.finishTodo("c");
     });
-    expect(result.current.categoriesWithEvents[1].items.length).toBe(0);
+    expect(result.current.categoriesWithEvents[1].items.length).toBe(2);
 
     jest.advanceTimersByTime(1000 * 60 * 60 * 24);
     forceTick(result);
 
-    expect(result.current.categoriesWithEvents[1].items.length).toBe(1);
+    expect(result.current.categoriesWithEvents[1].items.length).toBe(3);
   });
 });
