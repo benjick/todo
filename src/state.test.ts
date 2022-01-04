@@ -45,7 +45,6 @@ describe("re-showing tasks after a while", () => {
     expect(result.current.categoriesWithEvents[1].items.length).toBe(0);
 
     jest.advanceTimersByTime(1000 * 60 * 60 * 24);
-    // forceTick(result);
     forceTick(result);
 
     expect(result.current.categoriesWithEvents[1].items.length).toBe(1);
