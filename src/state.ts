@@ -21,9 +21,13 @@ export interface Item {
   timerMinutes?: number;
 }
 
-interface CategoryWithItems extends Category {
-  hide: boolean;
-  items: Item[];
+export interface DerivedItem extends Item {
+  done: boolean;
+}
+
+export interface DerivedCategory extends Category {
+  done: boolean;
+  items: DerivedItem[];
 }
 
 interface Event {
@@ -37,6 +41,25 @@ interface State {
   items: Item[];
   events: Event[];
   showCompleted: boolean;
+}
+
+function isItemDone(events: Event[], item: Item, resetAfterDays?: number) {
+  const compareDate = getCompareData(resetAfterDays);
+  const latestEvent = events.find((event) => event.item === item.id);
+
+  if (!latestEvent) {
+    return false;
+  }
+
+  if (compareDate && dayjs(latestEvent.date).isAfter(compareDate)) {
+    return true;
+  }
+
+  if (!compareDate) {
+    return true;
+  }
+
+  return false;
 }
 
 const initialState: State = {
@@ -180,48 +203,35 @@ export const useTodo = () => {
     setShowCompleted: state.setShowCompleted,
   }));
 
-  const categoriesWithEvents = useMemo(() => {
+  const categoriesWithItems = useMemo(() => {
     let sortedEvents = events.slice().sort((a, b) => {
       return new Date(b.date).getTime() - new Date(a.date).getTime();
     });
     let sortedCategories = categories
       .slice()
       .sort((a, b) => a.sort - b.sort)
-      .map((category): CategoryWithItems => {
-        let doneItems = 0;
-        const _items = items.filter((item) => {
-          if (item.category !== category.id) {
-            return false;
-          }
-
-          if (!showCompleted) {
-            const compareDate = getCompareData(category.resetAfterDays);
-
-            const latestEvent = sortedEvents.find(
-              (event) => event.item === item.id
-            );
-            if (
-              latestEvent &&
-              ((compareDate && dayjs(latestEvent.date).isAfter(compareDate)) ||
-                !compareDate)
-            ) {
-              doneItems += 1;
-              return false;
-            }
-          }
-          return true;
-        });
+      .map((category): DerivedCategory => {
+        const __items: DerivedItem[] = items
+          .filter((item) => item.category === category.id)
+          .map((item) => {
+            return {
+              ...item,
+              done: isItemDone(sortedEvents, item, category.resetAfterDays),
+            };
+          });
+        const doneItems = __items.filter((item) => item.done).length;
+        const doneCategory = category.closeAfterFinished
+          ? doneItems >= category.closeAfterFinished
+          : doneItems === __items.length;
         return {
           ...category,
-          items: _items,
-          hide: category.closeAfterFinished
-            ? doneItems >= category.closeAfterFinished
-            : false,
-        } as CategoryWithItems;
+          items: __items,
+          done: doneCategory,
+        } as DerivedCategory;
       });
 
     return sortedCategories;
-  }, [categories, items, events, showCompleted]);
+  }, [categories, events, items]);
 
-  return { categoriesWithEvents, finishTodo, setShowCompleted, showCompleted };
+  return { categoriesWithItems, finishTodo, setShowCompleted, showCompleted };
 };

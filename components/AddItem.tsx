@@ -6,7 +6,7 @@ import { useTodo, useStore } from "../src/state";
 export function AddItem() {
   const [open, setOpen] = useState(false);
 
-  const { categoriesWithEvents } = useTodo();
+  const { categoriesWithItems: categoriesWithEvents } = useTodo();
   const { addItem } = useStore();
   const nameRef = useRef<HTMLInputElement>(null);
   const categoryRef = useRef<HTMLSelectElement>(null);

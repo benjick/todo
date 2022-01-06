@@ -8,10 +8,8 @@ import { TodoItem } from "../components/TodoItem";
 import { EmptyState } from "../components/EmptyState";
 
 const Home: NextPage = () => {
-  const { categoriesWithEvents } = useTodo();
-  const categoriesWithEventsAndItems = categoriesWithEvents.filter(
-    (category) => category.items.length > 0 && !category.hide
-  );
+  const { categoriesWithItems } = useTodo();
+  const categories = categoriesWithItems.filter((category) => !category.done);
   return (
     <div>
       <Head>
@@ -27,10 +25,10 @@ const Home: NextPage = () => {
         </span>
         <hr />
 
-        {categoriesWithEventsAndItems.length > 0 ? (
+        {categories.length > 0 ? (
           <div className="bg-white shadow overflow-hidden sm:rounded-md">
             <ul role="list" className="divide-y divide-gray-200">
-              {categoriesWithEventsAndItems.map((category) => (
+              {categories.map((category) => (
                 <li key={category.id} className="px-4 py-4 sm:px-6">
                   <p className="block text-sm font-medium text-gray-700 mb-4">
                     {category.name}{" "}
@@ -39,9 +37,11 @@ const Home: NextPage = () => {
                     ) : undefined}
                   </p>
                   <ul role="list" className="-my-5 divide-y divide-gray-200">
-                    {category.items.map((item) => (
-                      <TodoItem key={item.id} item={item} />
-                    ))}
+                    {category.items
+                      .filter((item) => !item.done)
+                      .map((item) => (
+                        <TodoItem key={item.id} item={item} />
+                      ))}
                   </ul>
                 </li>
               ))}
