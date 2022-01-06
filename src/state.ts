@@ -170,11 +170,16 @@ export const useStore = create(
       name: "todo",
       getStorage: () =>
         process.env.NODE_ENV === "test" ? storageStub : localStorage,
-      partialize: (state) => ({
-        // categories: state.categories,
-        // items: state.items,
-        // events: state.events,
-      }),
+      partialize: (state) => {
+        if (process.env.NODE_ENV === "development") {
+          return {};
+        }
+        return {
+          categories: state.categories,
+          items: state.items,
+          events: state.events,
+        };
+      },
     }
   )
 );
