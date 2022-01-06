@@ -8,8 +8,10 @@ import { TodoItem } from "../components/TodoItem";
 import { EmptyState } from "../components/EmptyState";
 
 const Home: NextPage = () => {
-  const { categoriesWithItems } = useTodo();
-  const categories = categoriesWithItems.filter((category) => !category.done);
+  const { categoriesWithItems, showCompleted } = useTodo();
+  const categories = categoriesWithItems.filter(
+    (category) => showCompleted || !category.done
+  );
   return (
     <div>
       <Head>
@@ -38,7 +40,7 @@ const Home: NextPage = () => {
                   </p>
                   <ul role="list" className="-my-5 divide-y divide-gray-200">
                     {category.items
-                      .filter((item) => !item.done)
+                      .filter((item) => showCompleted || !item.done)
                       .map((item) => (
                         <TodoItem key={item.id} item={item} />
                       ))}
