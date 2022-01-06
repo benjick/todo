@@ -68,7 +68,6 @@ const initialState: State = {
       id: "todos",
       name: "Todos",
       sort: 0,
-      closeAfterFinished: 0,
     },
     {
       id: "daily",
@@ -139,6 +138,22 @@ export const useStore = create(
         set(
           produce((state: State) => {
             state.categories.push(newCategory);
+          })
+        );
+      },
+      updateCategory: async (
+        id: string,
+        category: Partial<Omit<Category, "id">>
+      ) => {
+        set(
+          produce((state: State) => {
+            const index = state.categories.findIndex((cat) => cat.id === id);
+            if (index) {
+              state.categories[index] = {
+                ...state.categories[index],
+                ...category,
+              };
+            }
           })
         );
       },

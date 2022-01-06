@@ -6,17 +6,32 @@ import { ShowCompleted } from "../components/ShowCompleted";
 import { AddItem } from "../components/AddItem";
 import { TodoItem } from "../components/TodoItem";
 import { EmptyState } from "../components/EmptyState";
+import { CategoryPopup } from "../components/CategoryPopup";
+import { useCategoryForm } from "../src/category";
 
 const CategoryTitle: React.FC<{ category: DerivedCategory }> = ({
   category,
-}) => (
-  <p className="block text-sm font-medium text-gray-700 mb-4">
-    {category.name}{" "}
-    {category.closeAfterFinished ? (
-      <span>(complete {category.closeAfterFinished})</span>
-    ) : undefined}
-  </p>
-);
+}) => {
+  const { setOpen, setForm } = useCategoryForm();
+  return (
+    <button
+      onClick={() => {
+        setForm(category.id, {
+          name: category.name,
+          closeAfterFinished: category.closeAfterFinished,
+          resetAfterDays: category.resetAfterDays,
+        });
+        setOpen(true);
+      }}
+      className="block text-sm font-medium text-gray-700 mb-4"
+    >
+      {category.name}{" "}
+      {category.closeAfterFinished ? (
+        <span>(complete {category.closeAfterFinished})</span>
+      ) : undefined}
+    </button>
+  );
+};
 
 const Home: NextPage = () => {
   const { categoriesWithItems, showCompleted } = useTodo();
@@ -29,6 +44,9 @@ const Home: NextPage = () => {
         <title>TODO</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
+      {/* Popups */}
+      <CategoryPopup />
 
       <main>
         <div className="relative z-0 inline-flex shadow-sm rounded-md m-2">
