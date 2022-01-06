@@ -39,7 +39,7 @@ describe("re-showing tasks after a while", () => {
     });
     expect(openItems(result.current.categoriesWithItems[1])).toBe(2);
 
-    jest.advanceTimersByTime(1000 * 60 * 60 * 24 + 100);
+    jest.advanceTimersByTime(1000 * 60 * 60 * 24 - 100);
     act(() => {
       result.current.finishTodo("bingbong");
     });

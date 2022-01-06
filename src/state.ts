@@ -183,7 +183,7 @@ function getCompareData(resetAfterDays?: number) {
   if (!resetAfterDays || resetAfterDays < 1) {
     return undefined;
   }
-  return dayjs().subtract(resetAfterDays, "days");
+  return dayjs().subtract(resetAfterDays, "days").endOf("day");
 }
 
 export const useTodo = () => {
