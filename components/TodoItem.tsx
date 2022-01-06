@@ -6,6 +6,7 @@ import { CheckIcon, ClockIcon } from "@heroicons/react/outline";
 import { msToTime } from "../src/helpers";
 import useSound from "use-sound";
 import lofiBells from "../assets/lofi-bells.mp3";
+import { useItemForm } from "../src/item";
 
 const Child: React.FC<{ title: string; onClick: (e: any) => void; icon: any }> =
   ({ children, title, onClick, icon: Icon }) => {
@@ -153,6 +154,8 @@ export const TodoItem: React.FC<{ item: Item }> = ({ item }) => {
     }, 200);
   }
 
+  const { setOpen, setForm } = useItemForm();
+
   return (
     <li className="py-4">
       {item.timerMinutes ? (
@@ -172,12 +175,22 @@ export const TodoItem: React.FC<{ item: Item }> = ({ item }) => {
           )}
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium text-gray-900 truncate">
+          <button
+            onClick={() => {
+              setForm(item.id, {
+                name: item.name,
+                category: item.category,
+                timerMinutes: item.timerMinutes,
+              });
+              setOpen(true);
+            }}
+            className="text-sm font-medium text-gray-900 truncate"
+          >
             {item.name}{" "}
             {item.timerMinutes ? (
               <span>({item.timerMinutes} min)</span>
             ) : undefined}
-          </p>
+          </button>
         </div>
         <div>
           {item.timerMinutes ? (

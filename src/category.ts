@@ -1,6 +1,4 @@
-import create from "zustand";
-import produce from "immer";
-import { combine } from "zustand/middleware";
+import { createForm } from "./form";
 
 interface FormState {
   name: string;
@@ -14,29 +12,4 @@ const initialFormState: FormState = {
   closeAfterFinished: undefined,
 };
 
-export const useCategoryForm = create(
-  combine(
-    {
-      id: undefined as string | undefined,
-      form: initialFormState,
-      open: false,
-    },
-    (set) => ({
-      setOpen(open: boolean) {
-        set({ open });
-      },
-      resetForm() {
-        set({ id: undefined, form: initialFormState });
-      },
-      setForm(id: string, form: FormState) {
-        set({ id, form });
-      },
-      updateForm: (id: keyof FormState, value: unknown) =>
-        set(
-          produce((state) => {
-            state.form[id] = value;
-          })
-        ),
-    })
-  )
-);
+export const useCategoryForm = createForm(initialFormState);

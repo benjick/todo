@@ -8,6 +8,7 @@ import { TodoItem } from "../components/TodoItem";
 import { EmptyState } from "../components/EmptyState";
 import { CategoryPopup } from "../components/CategoryPopup";
 import { useCategoryForm } from "../src/category";
+import { ItemPopup } from "../components/ItemPopup";
 
 const CategoryTitle: React.FC<{ category: DerivedCategory }> = ({
   category,
@@ -47,6 +48,7 @@ const Home: NextPage = () => {
 
       {/* Popups */}
       <CategoryPopup />
+      <ItemPopup />
 
       <main>
         <div className="relative z-0 inline-flex shadow-sm rounded-md m-2">

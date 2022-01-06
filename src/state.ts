@@ -168,6 +168,19 @@ export const useStore = create(
           })
         );
       },
+      updateItem: async (id: string, item: Partial<Omit<Item, "id">>) => {
+        set(
+          produce((state: State) => {
+            const index = state.items.findIndex((item) => item.id === id);
+            if (index) {
+              state.items[index] = {
+                ...state.items[index],
+                ...item,
+              };
+            }
+          })
+        );
+      },
       finishTodo: async (item: string) => {
         const event: Event = {
           id: uuidv4(),
