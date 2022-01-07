@@ -7,7 +7,7 @@ import { useCategoryForm } from "../src/form/category";
 export function CategoryPopup() {
   const { open, setOpen, form, updateForm, id } = useCategoryForm();
 
-  const { categoriesWithItems } = useTodo();
+  const { derivedCategories } = useTodo();
   const { addCategory, updateCategory } = useStore();
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -18,7 +18,7 @@ export function CategoryPopup() {
     } else {
       addCategory({
         ...form,
-        sort: categoriesWithItems.length,
+        sort: derivedCategories.length,
       });
     }
     setOpen(false);

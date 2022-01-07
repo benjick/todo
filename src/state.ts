@@ -210,15 +210,15 @@ export const useTodo = () => {
     setShowCompleted: state.setShowCompleted,
   }));
 
-  const categoriesWithItems = useMemo(() => {
+  const derivedCategories = useMemo(() => {
     let sortedEvents = events.slice().sort((a, b) => {
       return new Date(b.date).getTime() - new Date(a.date).getTime();
     });
-    let sortedCategories = categories
+    return categories
       .slice()
       .sort((a, b) => a.sort - b.sort)
       .map((category): DerivedCategory => {
-        const __items: DerivedItem[] = items
+        const derivedItems: DerivedItem[] = items
           .filter((item) => item.category === category.id)
           .map((item) => {
             return {
@@ -226,19 +226,22 @@ export const useTodo = () => {
               done: isItemDone(sortedEvents, item, category.resetAfterDays),
             };
           });
-        const doneItems = __items.filter((item) => item.done).length;
+        const doneItems = derivedItems.filter((item) => item.done).length;
         const doneCategory = category.closeAfterFinished
           ? doneItems >= category.closeAfterFinished
-          : doneItems === __items.length;
+          : doneItems === derivedItems.length;
         return {
           ...category,
-          items: __items,
+          items: derivedItems,
           done: doneCategory,
         } as DerivedCategory;
       });
-
-    return sortedCategories;
   }, [categories, events, items]);
 
-  return { categoriesWithItems, finishTodo, setShowCompleted, showCompleted };
+  return {
+    derivedCategories,
+    finishTodo,
+    setShowCompleted,
+    showCompleted,
+  };
 };

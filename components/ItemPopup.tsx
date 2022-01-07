@@ -7,7 +7,7 @@ import { useItemForm } from "../src/form/item";
 export function ItemPopup() {
   const { open, setOpen, form, updateForm, id } = useItemForm();
 
-  const { categoriesWithItems } = useTodo();
+  const { derivedCategories } = useTodo();
   const { addItem, updateItem } = useStore();
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -112,7 +112,7 @@ export function ItemPopup() {
                                 <option value="" disabled>
                                   Select a category
                                 </option>
-                                {categoriesWithItems.map((category) => (
+                                {derivedCategories.map((category) => (
                                   <option key={category.id} value={category.id}>
                                     {category.name}
                                   </option>

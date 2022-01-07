@@ -10,8 +10,8 @@ import { ItemPopup } from "../components/ItemPopup";
 import { TodoCategory } from "../components/TodoCategory";
 
 const Home: NextPage = () => {
-  const { categoriesWithItems, showCompleted } = useTodo();
-  const categories = categoriesWithItems.filter(
+  const { derivedCategories, showCompleted } = useTodo();
+  const categories = derivedCategories.filter(
     (category) => showCompleted || !category.done
   );
   return (
