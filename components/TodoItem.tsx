@@ -6,7 +6,7 @@ import { CheckIcon, ClockIcon } from "@heroicons/react/outline";
 import { msToTime } from "../src/helpers";
 import useSound from "use-sound";
 import lofiBells from "../assets/lofi-bells.mp3";
-import { useItemForm } from "../src/item";
+import { useItemForm } from "../src/form/item";
 
 const Child: React.FC<{ title: string; onClick: (e: any) => void; icon: any }> =
   ({ children, title, onClick, icon: Icon }) => {

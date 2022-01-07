@@ -7,7 +7,7 @@ import { AddItem } from "../components/AddItem";
 import { TodoItem } from "../components/TodoItem";
 import { EmptyState } from "../components/EmptyState";
 import { CategoryPopup } from "../components/CategoryPopup";
-import { useCategoryForm } from "../src/category";
+import { useCategoryForm } from "../src/form/category";
 import { ItemPopup } from "../components/ItemPopup";
 
 const CategoryTitle: React.FC<{ category: DerivedCategory }> = ({
