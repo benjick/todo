@@ -1,3 +1,6 @@
+import { default as dayjs } from "dayjs";
+import { Item, Event } from "./state";
+
 export function msToTime(s: number) {
   function pad(n: number, l = 2) {
     return n.toString().padStart(l, "0");
@@ -11,4 +14,34 @@ export function msToTime(s: number) {
   var hrs = (s - mins) / 60;
 
   return pad(hrs) + ":" + pad(mins) + ":" + pad(secs) + "." + pad(ms, 3);
+}
+
+function getCompareData(resetAfterDays?: number) {
+  if (!resetAfterDays || resetAfterDays < 1) {
+    return undefined;
+  }
+  return dayjs().subtract(resetAfterDays, "days").endOf("day");
+}
+
+export function isItemDone(
+  events: Event[],
+  item: Item,
+  resetAfterDays?: number
+) {
+  const compareDate = getCompareData(resetAfterDays);
+  const latestEvent = events.find((event) => event.item === item.id);
+
+  if (!latestEvent) {
+    return false;
+  }
+
+  if (compareDate && dayjs(latestEvent.date).isAfter(compareDate)) {
+    return true;
+  }
+
+  if (!compareDate) {
+    return true;
+  }
+
+  return false;
 }

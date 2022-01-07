@@ -3,8 +3,8 @@ import { persist, combine } from "zustand/middleware";
 import produce from "immer";
 import { v4 as uuidv4 } from "uuid";
 import { useMemo } from "react";
-import { default as dayjs } from "dayjs";
 import { storageStub } from "./storage.stub";
+import { isItemDone } from "./helpers";
 
 interface Category {
   id: string;
@@ -30,7 +30,7 @@ export interface DerivedCategory extends Category {
   items: DerivedItem[];
 }
 
-interface Event {
+export interface Event {
   id: string;
   item: string;
   date: Date;
@@ -41,25 +41,6 @@ interface State {
   items: Item[];
   events: Event[];
   showCompleted: boolean;
-}
-
-function isItemDone(events: Event[], item: Item, resetAfterDays?: number) {
-  const compareDate = getCompareData(resetAfterDays);
-  const latestEvent = events.find((event) => event.item === item.id);
-
-  if (!latestEvent) {
-    return false;
-  }
-
-  if (compareDate && dayjs(latestEvent.date).isAfter(compareDate)) {
-    return true;
-  }
-
-  if (!compareDate) {
-    return true;
-  }
-
-  return false;
 }
 
 const initialState: State = {
@@ -211,13 +192,6 @@ export const useStore = create(
     }
   )
 );
-
-function getCompareData(resetAfterDays?: number) {
-  if (!resetAfterDays || resetAfterDays < 1) {
-    return undefined;
-  }
-  return dayjs().subtract(resetAfterDays, "days").endOf("day");
-}
 
 export const useTodo = () => {
   const {
