@@ -1,5 +1,4 @@
 import type { NextPage } from "next";
-import Head from "next/head";
 import { useTodo } from "../src/state";
 import { AddCategory } from "../components/AddCategory";
 import { ShowCompleted } from "../components/ShowCompleted";
@@ -16,11 +15,6 @@ const Home: NextPage = () => {
   );
   return (
     <div>
-      <Head>
-        <title>TODO</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
       {/* Popups */}
       <CategoryPopup />
       <ItemPopup />
