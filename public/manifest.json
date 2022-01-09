@@ -2,7 +2,7 @@
   "name": "TODO",
   "theme_color": "#4338CA",
   "background_color": "#4338CA",
-  "display": "fullScreen",
+  "display": "standalone",
   "orientation": "portrait",
   "scope": "/",
   "start_url": "/",
