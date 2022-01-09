@@ -3,12 +3,13 @@ import { Dialog, Transition } from "@headlessui/react";
 import { XIcon } from "@heroicons/react/outline";
 import { useTodo, useStore } from "../src/state";
 import { useCategoryForm } from "../src/form/category";
+import { PopupDelete } from "./PopupDelete";
 
 export function CategoryPopup() {
   const { open, setOpen, form, updateForm, id } = useCategoryForm();
 
   const { derivedCategories } = useTodo();
-  const { addCategory, updateCategory } = useStore();
+  const { addCategory, updateCategory, deleteCategory } = useStore();
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -152,6 +153,14 @@ export function CategoryPopup() {
                     </div>
                   </div>
                   <div className="flex-shrink-0 px-4 py-4 flex justify-end">
+                    {id ? (
+                      <PopupDelete
+                        onClick={() => {
+                          deleteCategory(id);
+                          setOpen(false);
+                        }}
+                      />
+                    ) : undefined}
                     <button
                       type="button"
                       className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"

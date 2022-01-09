@@ -3,12 +3,13 @@ import { Dialog, Transition } from "@headlessui/react";
 import { XIcon } from "@heroicons/react/outline";
 import { useTodo, useStore } from "../src/state";
 import { useItemForm } from "../src/form/item";
+import { PopupDelete } from "./PopupDelete";
 
 export function ItemPopup() {
   const { open, setOpen, form, updateForm, id } = useItemForm();
 
   const { derivedCategories } = useTodo();
-  const { addItem, updateItem } = useStore();
+  const { addItem, updateItem, deleteItem } = useStore();
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -145,6 +146,14 @@ export function ItemPopup() {
                     </div>
                   </div>
                   <div className="flex-shrink-0 px-4 py-4 flex justify-end">
+                    {id ? (
+                      <PopupDelete
+                        onClick={() => {
+                          deleteItem(id);
+                          setOpen(false);
+                        }}
+                      />
+                    ) : undefined}
                     <button
                       type="button"
                       className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"

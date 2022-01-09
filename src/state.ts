@@ -138,6 +138,16 @@ export const useStore = create(
           })
         );
       },
+      deleteCategory: (id: string) => {
+        set(
+          produce((state: State) => {
+            state.items = state.items.filter((item) => item.category !== id);
+            state.categories = state.categories.filter(
+              (category) => category.id !== id
+            );
+          })
+        );
+      },
       addItem: async (item: Omit<Item, "id">) => {
         const newItem: Item = {
           ...item,
@@ -161,6 +171,16 @@ export const useStore = create(
             }
           })
         );
+      },
+      deleteItem: (id: string) => {
+        const index = get().items.findIndex((item) => item.id === id);
+        if (index > -1) {
+          set(
+            produce((state: State) => {
+              state.items.splice(index, 1);
+            })
+          );
+        }
       },
       finishTodo: async (item: string) => {
         const event: Event = {
