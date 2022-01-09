@@ -1,4 +1,4 @@
-import { Item, useTodo } from "../src/state";
+import { DerivedItem, useTodo } from "../src/state";
 import { BadgeCheckIcon, BellIcon } from "@heroicons/react/solid";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
@@ -139,9 +139,9 @@ const Popup: React.FC<{
   );
 };
 
-export const TodoItem: React.FC<{ item: Item }> = ({ item }) => {
+export const TodoItem: React.FC<{ item: DerivedItem }> = ({ item }) => {
   const [showTimer, setShowTimer] = useState(false);
-  const { finishTodo } = useTodo();
+  const { finishTodo, undoTodo } = useTodo();
 
   function startTodo() {
     setShowTimer(true);
@@ -193,7 +193,14 @@ export const TodoItem: React.FC<{ item: Item }> = ({ item }) => {
           </button>
         </div>
         <div>
-          {item.timerMinutes ? (
+          {typeof item.done === "string" ? (
+            <button
+              onClick={() => undoTodo(item.done as string)}
+              className="inline-flex items-center shadow-sm px-2.5 py-0.5 border border-gray-300 text-sm leading-5 font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50"
+            >
+              Undo
+            </button>
+          ) : item.timerMinutes ? (
             <button
               onClick={() => startTodo()}
               className="inline-flex items-center shadow-sm px-2.5 py-0.5 border border-gray-300 text-sm leading-5 font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50"

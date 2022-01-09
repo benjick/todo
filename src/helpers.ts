@@ -36,11 +36,11 @@ export function isItemDone(
   }
 
   if (compareDate && dayjs(latestEvent.date).isAfter(compareDate)) {
-    return true;
+    return latestEvent.id;
   }
 
   if (!compareDate) {
-    return true;
+    return latestEvent.id;
   }
 
   return false;

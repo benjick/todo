@@ -22,7 +22,7 @@ export interface Item {
 }
 
 export interface DerivedItem extends Item {
-  done: boolean;
+  done: string | false;
 }
 
 export interface DerivedCategory extends Category {
@@ -174,6 +174,16 @@ export const useStore = create(
           })
         );
       },
+      undoTodo: async (id: string) => {
+        const index = get().events.findIndex((event) => event.id === id);
+        if (index > -1) {
+          set(
+            produce((state: State) => {
+              state.events.splice(index, 1);
+            })
+          );
+        }
+      },
     })),
     {
       name: "todo",
@@ -199,6 +209,7 @@ export const useTodo = () => {
     items,
     events,
     finishTodo,
+    undoTodo,
     showCompleted,
     setShowCompleted,
   } = useStore((state) => ({
@@ -208,6 +219,7 @@ export const useTodo = () => {
     finishTodo: state.finishTodo,
     showCompleted: state.showCompleted,
     setShowCompleted: state.setShowCompleted,
+    undoTodo: state.undoTodo,
   }));
 
   const derivedCategories = useMemo(() => {
@@ -242,6 +254,7 @@ export const useTodo = () => {
   return {
     derivedCategories,
     finishTodo,
+    undoTodo,
     setShowCompleted,
     showCompleted,
   };
