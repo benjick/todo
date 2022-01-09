@@ -1,9 +1,14 @@
 import { DerivedCategory } from "../src/state";
 import { TodoItem } from "../components/TodoItem";
 import { useCategoryForm } from "../src/form/category";
+import { useMemo } from "react";
 
 const Title: React.FC<{ category: DerivedCategory }> = ({ category }) => {
   const { setOpen, setForm } = useCategoryForm();
+  const completed = useMemo(
+    () => category.items.filter((category) => category.done).length,
+    [category]
+  );
   return (
     <button
       onClick={() => {
@@ -18,7 +23,13 @@ const Title: React.FC<{ category: DerivedCategory }> = ({ category }) => {
     >
       {category.name}{" "}
       {category.closeAfterFinished ? (
-        <span>(complete {category.closeAfterFinished})</span>
+        completed === 0 ? (
+          <span>(complete {category.closeAfterFinished})</span>
+        ) : (
+          <span>
+            ({completed}/{category.closeAfterFinished})
+          </span>
+        )
       ) : undefined}
     </button>
   );
