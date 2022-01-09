@@ -228,7 +228,8 @@ export const useTodo = () => {
           });
         const doneItems = derivedItems.filter((item) => item.done).length;
         const doneCategory = category.closeAfterFinished
-          ? doneItems >= category.closeAfterFinished
+          ? doneItems === derivedItems.length ||
+            doneItems >= category.closeAfterFinished
           : doneItems === derivedItems.length;
         return {
           ...category,
