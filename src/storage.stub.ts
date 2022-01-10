@@ -1,12 +1,8 @@
-interface Storage {
-  getItem: (name: string) => string | null | Promise<string | null>;
-  setItem: (name: string, value: string) => void | Promise<void>;
-  removeItem: (name: string) => void | Promise<void>;
-}
+import { StateStorage } from "zustand/middleware";
 
 const store: Record<string, any> = {};
 
-export const storageStub: Storage = {
+export const storageStub: StateStorage = {
   getItem: (name) => {
     return store[name];
   },
