@@ -1,14 +1,12 @@
 import { DerivedItem, useTodo } from "../src/state";
 import { BadgeCheckIcon, BellIcon } from "@heroicons/react/solid";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { CheckIcon, ClockIcon } from "@heroicons/react/outline";
 import { msToTime } from "../src/helpers";
-import useSound from "use-sound";
-import lofiBells from "../assets/lofi-bells.mp3";
 import { useItemForm } from "../src/hooks/useItemForm";
-import { default as dayjs } from "dayjs";
 import { useWakeLock } from "../src/hooks/useWakeLock";
+import { useCountdown } from "../src/hooks/useCountdown";
 
 const Child: React.FC<{
   title: string;
@@ -64,37 +62,8 @@ const Popup: React.FC<{
   finishedTodo: () => void;
   minutes: number;
 }> = ({ open, setOpen, finishedTodo, minutes }) => {
-  const [endTime, setEndTime] = useState<Date>();
-  const [currentTime, setCurrentTime] = useState<Date>();
+  const { timeleft } = useCountdown(open, minutes);
   useWakeLock(open);
-
-  const hasDates = endTime && currentTime;
-  const timeleft = dayjs(endTime).diff(currentTime);
-
-  const [play, { stop }] = useSound(lofiBells);
-  const intervalRef = useRef<NodeJS.Timer>();
-
-  // Opening and closing the popup
-  useEffect(() => {
-    if (open) {
-      setEndTime(dayjs().add(minutes, "minutes").toDate());
-      intervalRef.current = setInterval(() => {
-        setCurrentTime(new Date());
-      }, 99);
-    } else {
-      stop();
-      intervalRef.current && clearInterval(intervalRef.current);
-    }
-  }, [open, stop, minutes]);
-
-  // End the timer when time = 0
-  useEffect(() => {
-    if (open && hasDates && intervalRef.current && timeleft < 1) {
-      play();
-      clearInterval(intervalRef.current);
-      intervalRef.current = undefined;
-    }
-  }, [timeleft, play, open, hasDates]);
 
   return (
     <Transition.Root show={open} as={Fragment}>
