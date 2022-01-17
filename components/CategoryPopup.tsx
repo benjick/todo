@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XIcon } from "@heroicons/react/outline";
 import { useTodo, useStore } from "../src/state";
-import { useCategoryForm } from "../src/form/category";
+import { useCategoryForm } from "../src/hooks/useCategoryForm";
 import { PopupDelete } from "./PopupDelete";
 
 export function CategoryPopup() {

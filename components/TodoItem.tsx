@@ -6,8 +6,9 @@ import { CheckIcon, ClockIcon } from "@heroicons/react/outline";
 import { msToTime } from "../src/helpers";
 import useSound from "use-sound";
 import lofiBells from "../assets/lofi-bells.mp3";
-import { useItemForm } from "../src/form/item";
+import { useItemForm } from "../src/hooks/useItemForm";
 import { default as dayjs } from "dayjs";
+import { useWakeLock } from "../src/hooks/useWakeLock";
 
 const Child: React.FC<{
   title: string;
@@ -65,13 +66,13 @@ const Popup: React.FC<{
 }> = ({ open, setOpen, finishedTodo, minutes }) => {
   const [endTime, setEndTime] = useState<Date>();
   const [currentTime, setCurrentTime] = useState<Date>();
+  useWakeLock(open);
 
   const hasDates = endTime && currentTime;
   const timeleft = dayjs(endTime).diff(currentTime);
 
   const [play, { stop }] = useSound(lofiBells);
   const intervalRef = useRef<NodeJS.Timer>();
-  const ms = 100;
 
   // Opening and closing the popup
   useEffect(() => {
@@ -79,7 +80,7 @@ const Popup: React.FC<{
       setEndTime(dayjs().add(minutes, "minutes").toDate());
       intervalRef.current = setInterval(() => {
         setCurrentTime(new Date());
-      }, ms);
+      }, 99);
     } else {
       stop();
       intervalRef.current && clearInterval(intervalRef.current);

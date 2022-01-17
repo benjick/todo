@@ -1,4 +1,4 @@
-import { createForm } from "./form";
+import { createForm } from "./createForm";
 
 interface FormState {
   name: string;

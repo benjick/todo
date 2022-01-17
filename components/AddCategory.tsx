@@ -1,4 +1,4 @@
-import { useCategoryForm } from "../src/form/category";
+import { useCategoryForm } from "../src/hooks/useCategoryForm";
 
 export function AddCategory() {
   const { setOpen, resetForm } = useCategoryForm();
