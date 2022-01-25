@@ -207,6 +207,7 @@ export const useStore = create(
     })),
     {
       name: "todo",
+      version: 1,
       getStorage: () =>
         process.env.NODE_ENV === "test" ? storageStub : localStorage,
       partialize: (state) => {
